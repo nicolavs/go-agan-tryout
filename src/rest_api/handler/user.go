@@ -6,9 +6,8 @@ import (
 	"rest_api/config"
 	"rest_api/database"
 	"rest_api/model"
+	"strconv"
 )
-
-
 
 func validToken(t *jwt.Token, rolesNeeded []string) bool {
 	claims := t.Claims.(jwt.MapClaims)
@@ -26,11 +25,18 @@ func validToken(t *jwt.Token, rolesNeeded []string) bool {
 	return false
 }
 
-// GetAllUsers from db
+// GetAllUsers godoc
 func GetAllUsers(c *fiber.Ctx) error {
 	_ = c.Locals("user").(*jwt.Token)
+	//claims := user.Claims.(jwt.MapClaims)
+	//name := claims["name"].(string)
+	limitStr := c.Query("limit", "20")
+	limit, _ := strconv.Atoi(limitStr)
+	skipStr := c.Query("skip", "0")
+	skip, _ := strconv.Atoi(skipStr)
+
 	var users []model.User
-	database.DB.Find(&users)
+	database.DB.Find(&users).Limit(limit).Offset(skip)
 
 	return c.Status(200).JSON(model.ResponseHTTP{
 		Status:  "success",
