@@ -39,6 +39,28 @@ func ConnectDb() {
 	db.Logger = logger.Default.LogMode(logger.Info)
 	log.Println("running migrations")
 	db.AutoMigrate(&model.User{})
-
+	createAdminUser(db)
 	DB = db
+}
+
+func createAdminUser(db *gorm.DB) {
+	var user model.User
+	result := db.Where(&model.User{Username: "admin"}).Find(&user)
+	if result.RowsAffected == 0 {
+		hash, err := config.HashPassword(config.Config("ADMIN_DEFAULT_PASSWORD"))
+		if err != nil {
+			log.Fatal("Failed to create admin user. \n", err)
+			os.Exit(2)
+		}
+		newUser := model.User{
+			Username: "admin",
+			Email:    "aganpro@gmail.com",
+			Password: hash,
+		}
+		if err := db.Create(&newUser).Error; err != nil {
+			log.Fatal("Failed to create admin user. \n", err)
+			os.Exit(2)
+		}
+
+	}
 }

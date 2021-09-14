@@ -16,6 +16,13 @@ import (
 // @title Agan Tryout App
 // @version 1.0
 // @description This is an API for Agan Tryout Application
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+
+// @BasePath /api/v1
+
 func main() {
 	database.ConnectDb()
 	app := fiber.New(config.FiberConfig())

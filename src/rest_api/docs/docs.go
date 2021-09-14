@@ -23,7 +23,7 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/login": {
+        "/auth/login": {
             "post": {
                 "description": "Get jwt token",
                 "consumes": [
@@ -33,13 +33,13 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
                 "summary": "Get jwt token",
                 "parameters": [
                     {
                         "description": "Login Input",
-                        "name": "auth",
+                        "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -102,6 +102,13 @@ var doc = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
@@ -118,7 +125,7 @@ type swaggerInfo struct {
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
 	Host:        "",
-	BasePath:    "",
+	BasePath:    "/api/v1",
 	Schemes:     []string{},
 	Title:       "Agan Tryout App",
 	Description: "This is an API for Agan Tryout Application",

@@ -3,16 +3,12 @@ package handler
 import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
-	"golang.org/x/crypto/bcrypt"
 	"rest_api/config"
 	"rest_api/database"
 	"rest_api/model"
 )
 
-func hashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
-}
+
 
 func validToken(t *jwt.Token, rolesNeeded []string) bool {
 	claims := t.Claims.(jwt.MapClaims)
@@ -59,7 +55,7 @@ func CreateUser(c *fiber.Ctx) error {
 
 	}
 
-	hash, err := hashPassword(u.Password)
+	hash, err := config.HashPassword(u.Password)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Couldn't hash password", "data": err})
 

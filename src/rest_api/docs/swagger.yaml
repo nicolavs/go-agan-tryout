@@ -1,3 +1,4 @@
+basePath: /api/v1
 definitions:
   model.LoginInput:
     properties:
@@ -21,7 +22,7 @@ info:
   title: Agan Tryout App
   version: "1.0"
 paths:
-  /api/v1/login:
+  /auth/login:
     post:
       consumes:
       - application/json
@@ -29,7 +30,7 @@ paths:
       parameters:
       - description: Login Input
         in: body
-        name: auth
+        name: input
         required: true
         schema:
           $ref: '#/definitions/model.LoginInput'
@@ -51,5 +52,10 @@ paths:
             $ref: '#/definitions/model.ResponseHTTP'
       summary: Get jwt token
       tags:
-      - auth
+      - Auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

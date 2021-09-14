@@ -1,6 +1,9 @@
 package config
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"golang.org/x/crypto/bcrypt"
+)
 
 // NotFound returns custom 404 page
 func NotFound(c *fiber.Ctx) error {
@@ -15,4 +18,9 @@ func Contains(s []string, str string) bool {
 	}
 
 	return false
+}
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
 }

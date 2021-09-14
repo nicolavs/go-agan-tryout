@@ -22,5 +22,6 @@ services:
       POSTGRES_PORT: "5432"
       POSTGRES_HOST: "postgres"
       JWT_SECRET: "secret"
+      ADMIN_DEFAULT_PASSWORD: "tryoutpassword"
     depends_on:
       - postgres

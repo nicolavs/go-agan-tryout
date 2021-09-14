@@ -6,8 +6,9 @@
         "contact": {},
         "version": "1.0"
     },
+    "basePath": "/api/v1",
     "paths": {
-        "/api/v1/login": {
+        "/auth/login": {
             "post": {
                 "description": "Get jwt token",
                 "consumes": [
@@ -17,13 +18,13 @@
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
                 "summary": "Get jwt token",
                 "parameters": [
                     {
                         "description": "Login Input",
-                        "name": "auth",
+                        "name": "input",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -85,6 +86,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }
