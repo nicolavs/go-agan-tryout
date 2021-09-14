@@ -38,21 +38,21 @@ func validToken(t *jwt.Token, rolesNeeded []string) bool {
 // @Failure 503 {object} model.ResponseHTTP
 // @Router /user [get]
 func GetAllUsers(c *fiber.Ctx) error {
-	_ = c.Locals("user").(*jwt.Token)
-	//claims := user.Claims.(jwt.MapClaims)
-	//name := claims["name"].(string)
 	limitStr := c.Query("limit", "20")
 	limit, _ := strconv.Atoi(limitStr)
 	skipStr := c.Query("skip", "0")
 	skip, _ := strconv.Atoi(skipStr)
 
 	var users []model.User
+	var count int64
+	database.DB.Model(&model.User{}).Count(&count)
 	database.DB.Find(&users).Limit(limit).Offset(skip)
 
 	return c.Status(200).JSON(model.ResponseHTTP{
 		Status:  "success",
 		Message: "Success get",
 		Data:    users,
+		Count:   count,
 	})
 }
 
@@ -90,7 +90,7 @@ func CreateUser(c *fiber.Ctx) error {
 
 	return c.Status(201).JSON(model.ResponseHTTP{
 		Status:  "success",
-		Message: "Success login",
+		Message: "Success create user",
 		Data:    u,
 	})
 }

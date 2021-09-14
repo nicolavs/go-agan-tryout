@@ -21,7 +21,7 @@ func CheckPasswordHash(password, hash string) bool {
 func getUserByUsername(u string) (*model.User, error) {
 	db := database.DB
 	var user model.User
-	if err := db.Where(&model.User{Username: u}).Find(&user).Error; err != nil {
+	if err := db.Where(&model.User{Username: u}).Find(&user).Limit(1).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
@@ -47,10 +47,10 @@ func Login(c *fiber.Ctx) error {
 	if err := c.BodyParser(&input); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Error on login request", "data": err})
 	}
-	identity := input.Identity
+	username := input.Username
 	pass := input.Password
 
-	user, err := getUserByUsername(identity)
+	user, err := getUserByUsername(username)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "Error on username", "data": err})
 	}

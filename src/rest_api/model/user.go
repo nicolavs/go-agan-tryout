@@ -15,7 +15,7 @@ type CreateUser struct {
 }
 
 type LoginInput struct {
-	Identity string `json:"username"`
+	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
@@ -24,4 +24,5 @@ type ResponseHTTP struct {
 	Status  string      `json:"status"`
 	Data    interface{} `json:"data"`
 	Message string      `json:"message"`
+	Count   int64       `json:"count,omitempty"`
 }
