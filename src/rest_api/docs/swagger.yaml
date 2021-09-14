@@ -1,4 +1,11 @@
 definitions:
+  model.LoginInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   model.ResponseHTTP:
     properties:
       data:
@@ -15,10 +22,17 @@ info:
   version: "1.0"
 paths:
   /api/v1/login:
-    get:
+    post:
       consumes:
       - application/json
       description: Get jwt token
+      parameters:
+      - description: Login Input
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginInput'
       produces:
       - application/json
       responses:

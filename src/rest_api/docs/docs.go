@@ -24,7 +24,7 @@ var doc = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/v1/login": {
-            "get": {
+            "post": {
                 "description": "Get jwt token",
                 "consumes": [
                     "application/json"
@@ -36,6 +36,17 @@ var doc = `{
                     "auth"
                 ],
                 "summary": "Get jwt token",
+                "parameters": [
+                    {
+                        "description": "Login Input",
+                        "name": "auth",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.LoginInput"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -66,6 +77,17 @@ var doc = `{
         }
     },
     "definitions": {
+        "model.LoginInput": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "model.ResponseHTTP": {
             "type": "object",
             "properties": {
