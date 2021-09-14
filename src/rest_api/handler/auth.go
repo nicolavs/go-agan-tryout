@@ -33,13 +33,13 @@ func getUserByUsername(u string) (*model.User, error) {
 // Login is a function to get token
 // @Summary Get jwt token
 // @Description Get jwt token
-// @Tags Login
+// @Tags Auth
 // @Accept json
 // @Produce json
 // @Param auth body model.LoginInput true "Login Input"
 // @Success 200 {object} model.ResponseHTTP{data=string}
 // @Failure 503 {object} model.ResponseHTTP
-// @Router /api/v1/login [post]
+// @Router /api/v1/auth/login [post]
 func Login(c *fiber.Ctx) error {
 	var input model.LoginInput
 	var ud model.User
