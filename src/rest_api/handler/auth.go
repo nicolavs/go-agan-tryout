@@ -36,9 +36,9 @@ func getUserByUsername(u string) (*model.User, error) {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Success 200 {object} ResponseHTTP{data=models.ResponseHTTP}
-// @Failure 503 {object} models.ResponseHTTP
-// @Router api/v1/login [get]
+// @Success 200 {object} model.ResponseHTTP{data=string}
+// @Failure 503 {object} model.ResponseHTTP
+// @Router /api/v1/login [get]
 func Login(c *fiber.Ctx) error {
 	var input model.LoginInput
 	var ud model.User

@@ -6,6 +6,7 @@ require (
 	github.com/arsmn/fiber-swagger/v2 v2.17.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gofiber/fiber/v2 v2.17.0
+	github.com/swaggo/swag v1.7.1
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 	gorm.io/driver/postgres v1.1.1
 	gorm.io/gorm v1.21.15
@@ -34,7 +35,6 @@ require (
 	github.com/klauspost/compress v1.12.2 // indirect
 	github.com/mailru/easyjson v0.7.6 // indirect
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14 // indirect
-	github.com/swaggo/swag v1.7.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.26.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect

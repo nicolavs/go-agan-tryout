@@ -10,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"rest_api/config"
 	"rest_api/database"
+	_ "rest_api/docs"
 )
 
 // @title Agan Tryout App

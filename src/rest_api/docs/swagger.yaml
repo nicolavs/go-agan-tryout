@@ -1,0 +1,41 @@
+definitions:
+  model.ResponseHTTP:
+    properties:
+      data:
+        type: object
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is an API for Agan Tryout Application
+  title: Agan Tryout App
+  version: "1.0"
+paths:
+  /api/v1/login:
+    get:
+      consumes:
+      - application/json
+      description: Get jwt token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseHTTP'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/model.ResponseHTTP'
+      summary: Get jwt token
+      tags:
+      - auth
+swagger: "2.0"

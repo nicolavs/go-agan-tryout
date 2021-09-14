@@ -6,9 +6,9 @@ import "gorm.io/gorm"
 type User struct {
 	gorm.Model
 
-	ID       uint   `gorm:"primarykey;auto_increment;not_null" json:"id"`
-	Username string `gorm:"unique_index;not null" json:"username"`
-	Email    string `gorm:"unique_index;not null" json:"email"`
+	ID       uint   `gorm:"primaryKey;autoIncrement;not_null" json:"id"`
+	Username string `gorm:"uniqueIndex;not null" json:"username"`
+	Email    string `gorm:"uniqueIndex;not null" json:"email"`
 	Password string `gorm:"not null" json:"-"`
 }
 
