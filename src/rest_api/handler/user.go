@@ -1,28 +1,83 @@
 package handler
 
 import (
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
+	"golang.org/x/crypto/bcrypt"
+	"rest_api/config"
 	"rest_api/database"
 	"rest_api/model"
 )
 
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func validToken(t *jwt.Token, rolesNeeded []string) bool {
+	claims := t.Claims.(jwt.MapClaims)
+	roles := claims["roles"].([]string)
+	if config.Contains(roles, "administrator") {
+		return true
+	}
+
+	for _, r := range rolesNeeded {
+		if config.Contains(roles, r) {
+			return true
+		}
+	}
+
+	return false
+}
+
 // GetAllUsers from db
 func GetAllUsers(c *fiber.Ctx) error {
-	// query user table in the database
-	rows, err := database.DB.Query("SELECT id, username, email, password FROM users order by name")
+	_ = c.Locals("user").(*jwt.Token)
+	var users []model.User
+	database.DB.Find(&users)
+
+	return c.Status(200).JSON(model.ResponseHTTP{
+		Status:  "success",
+		Message: "Success login",
+		Data:    users,
+	})
+}
+
+// CreateUser into db
+func CreateUser(c *fiber.Ctx) error {
+	token := c.Locals("user").(*jwt.Token)
+
+	if !validToken(token, []string{"administrator"}) {
+		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Invalid token id", "data": nil})
+	}
+	// New Employee struct
+	u := new(model.CreateUser)
+	db := database.DB
+
+	if err := c.BodyParser(u); err != nil {
+		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Review your input", "data": err})
+
+	}
+
+	hash, err := hashPassword(u.Password)
 	if err != nil {
-		return c.Status(500).SendString(err.Error())
+		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Couldn't hash password", "data": err})
+
 	}
-	defer rows.Close()
-	result := model.Users{}
-	for rows.Next() {
-		user := model.User{}
-		err := rows.Scan(&user.ID, &user.Username, &user.Email, &user.Password)
-		// Exit if we get an error
-		if err != nil {
-			return c.Status(500).SendString(err.Error())
-		}
-		result.Users = append(result.Users, user)
+
+	newUser := model.User{
+		Username: u.Username,
+		Email:    u.Email,
+		Password: hash,
 	}
-	return c.JSON(result)
+
+	if err := db.Create(&newUser).Error; err != nil {
+		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Couldn't create user", "data": err})
+	}
+
+	return c.Status(201).JSON(model.ResponseHTTP{
+		Status:  "success",
+		Message: "Success login",
+		Data:    u,
+	})
 }
