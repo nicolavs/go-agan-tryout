@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	"rest_api/config"
 	"rest_api/database"
 	"rest_api/model"
@@ -26,6 +26,17 @@ func validToken(t *jwt.Token, rolesNeeded []string) bool {
 }
 
 // GetAllUsers godoc
+// @Summary Get all users
+// @Description Get all users
+// @Tags User
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param skip query int false "Offset"
+// @Param limit query int false "Limit"
+// @Success 200 {object} model.ResponseHTTP{data=[]model.User}
+// @Failure 503 {object} model.ResponseHTTP
+// @Router /user [get]
 func GetAllUsers(c *fiber.Ctx) error {
 	_ = c.Locals("user").(*jwt.Token)
 	//claims := user.Claims.(jwt.MapClaims)
@@ -40,7 +51,7 @@ func GetAllUsers(c *fiber.Ctx) error {
 
 	return c.Status(200).JSON(model.ResponseHTTP{
 		Status:  "success",
-		Message: "Success login",
+		Message: "Success get",
 		Data:    users,
 	})
 }

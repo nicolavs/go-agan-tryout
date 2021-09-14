@@ -1,11 +1,7 @@
 package model
 
-import "gorm.io/gorm"
-
 // User model
 type User struct {
-	gorm.Model
-
 	ID       uint   `gorm:"primaryKey;autoIncrement;not_null" json:"id"`
 	Username string `gorm:"uniqueIndex;not null" json:"username"`
 	Email    string `gorm:"uniqueIndex;not null" json:"email"`
@@ -13,7 +9,7 @@ type User struct {
 }
 
 type CreateUser struct {
-	Username string ` json:"username"`
+	Username string `json:"username"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }

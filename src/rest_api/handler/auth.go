@@ -2,8 +2,8 @@ package handler
 
 import (
 	"errors"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"rest_api/config"

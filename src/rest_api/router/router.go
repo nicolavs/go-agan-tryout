@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"rest_api/config"
 	"rest_api/handler"
+	"rest_api/middleware"
 )
 
 // SetupRoutes func
@@ -25,8 +26,8 @@ func SetupRoutes(app *fiber.App) {
 
 	// User
 	user := v1.Group("/user")
-	user.Get("/", handler.GetAllUsers)
-	user.Post("/", handler.CreateUser)
+	user.Get("/", middleware.JWTProtected(), handler.GetAllUsers)
+	user.Post("/", middleware.JWTProtected(), handler.CreateUser)
 
 	// Product
 	//product := api.Group("/product")

@@ -16,6 +16,15 @@ definitions:
       status:
         type: string
     type: object
+  model.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
 info:
   contact: {}
   description: This is an API for Agan Tryout Application
@@ -53,6 +62,43 @@ paths:
       summary: Get jwt token
       tags:
       - Auth
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      parameters:
+      - description: Offset
+        in: query
+        name: skip
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseHTTP'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.User'
+                  type: array
+              type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/model.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all users
+      tags:
+      - User
 securityDefinitions:
   ApiKeyAuth:
     in: header
