@@ -20,7 +20,7 @@ func getenv(key, fallback string) string {
 func FiberConfig() fiber.Config {
 	// Define server settings.
 	var preFork bool
-	readTimeoutSecondsCount, _ := strconv.Atoi(os.Getenv("SERVER_READ_TIMEOUT"))
+	readTimeoutSecondsCount, _ := strconv.Atoi(getenv("SERVER_READ_TIMEOUT", "60"))
 	switch environmentStr := getenv("ENVIRONMENT", "development"); environmentStr {
 	case "production":
 		preFork = true
