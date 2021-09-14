@@ -1,4 +1,4 @@
-module github.com/nicolavs/go-agan-tryout
+module github.com/nicolavs/go-agan-tryout/src/rest_api
 
 go 1.17
 
