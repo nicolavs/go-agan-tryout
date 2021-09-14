@@ -1,0 +1,24 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  postgres:
+    image: postgres:13
+    restart: unless-stopped
+    volumes:
+      - ./dockervol/postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "tryoutuser"
+      POSTGRES_PASSWORD: "tryoutuser"
+      POSTGRES_DB: "tryout"
+  api:
+    image: go-agan-tryout-api
+    restart: unless-stopped
+    ports:
+      - "8080:3000"
+    environment:
+      POSTGRES_USER: "tryoutuser"
+      POSTGRES_PASSWORD: "tryoutuser"
+      POSTGRES_DB: "tryout"
+      POSTGRES_PORT: "5432"
+      POSTGRES_HOST: "postgres"
+    depends_on:
+      - postgres

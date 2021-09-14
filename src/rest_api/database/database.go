@@ -18,15 +18,15 @@ var DB *gorm.DB
 // ConnectDb function
 func ConnectDb() {
 	var err error
-	p := config.Config("DB_PORT")
+	p := config.Config("POSTGRES_PORT")
 	// because our config function returns a string, we are parsing our str to int here
 	port, err := strconv.ParseUint(p, 10, 32)
 	if err != nil {
 		fmt.Println("Error parsing str to int")
 	}
 
-	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", config.Config("DB_HOST"),
-		port, config.Config("DB_USER"), config.Config("DB_PASSWORD"), config.Config("DB_NAME"))
+	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", config.Config("POSTGRES_HOST"),
+		port, config.Config("POSTGRES_USER"), config.Config("POSTGRES_PASSWORD"), config.Config("POSTGRES_DB"))
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
