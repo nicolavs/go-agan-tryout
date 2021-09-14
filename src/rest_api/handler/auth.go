@@ -33,7 +33,7 @@ func getUserByUsername(u string) (*model.User, error) {
 // Login is a function to get token
 // @Summary Get jwt token
 // @Description Get jwt token
-// @Tags auth
+// @Tags Login
 // @Accept json
 // @Produce json
 // @Param auth body model.LoginInput true "Login Input"
