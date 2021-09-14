@@ -40,12 +40,8 @@ github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/me
 github.com/gofiber/fiber/v2 v2.17.0/go.mod h1:iftruuHGkRYGEXVISmdD7HTYWyfS2Bh+Dkfq4n/1Owg=
 github.com/gofiber/fiber/v2 v2.18.0 h1:xCWYSVoTNibHpzfciPwUSZGiTyTpTXYchCwynuJU09s=
 github.com/gofiber/fiber/v2 v2.18.0/go.mod h1:/LdZHMUXZvTTo7gU4+b1hclqCAdoQphNQ9bi9gutPyI=
-github.com/gofiber/jwt/v3 v3.0.2 h1:YbMm0t7hHmZU46SV3wgf86Ij3mrgg4hzfwuHmai3y4Q=
-github.com/gofiber/jwt/v3 v3.0.2/go.mod h1:kckQzqkbFdVY4utGduYl+gkDoawrMn26gdSi8QohOsU=
 github.com/gofrs/uuid v4.0.0+incompatible h1:1SD/1F5pU8p29ybwgQSwpQk+mwdRrXCYuPhW6m+TnJw=
 github.com/gofrs/uuid v4.0.0+incompatible/go.mod h1:b2aQJv3Z4Fp6yNu3cdSllBxTCLRxnplIgP/c0N/04lM=
-github.com/golang-jwt/jwt/v4 v4.0.0 h1:RAqyYixv1p7uEnocuy8P1nru5wprCh/MH2BIlW5z5/o=
-github.com/golang-jwt/jwt/v4 v4.0.0/go.mod h1:/xlHOz8bRuivTWchD4jCa+NbatV+wEUSzwAxVc6locg=
 github.com/golang/snappy v0.0.3/go.mod h1:/XxbfmMg8lxefKM7IXC3fBNl/7bRcc72aCRzEWrmP2Q=
 github.com/google/renameio v0.1.0/go.mod h1:KWCgfxg9yswjAJkECMjeO8J8rahYeXnNhOm40UhjYkI=
 github.com/jackc/chunkreader v1.0.0 h1:4s39bBR8ByfqH+DKm8rQA3E1LHZWB9XWcrz8fqaZbe0=
