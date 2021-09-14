@@ -3,7 +3,6 @@ package router
 import (
 	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
-	"rest_api/config"
 	"rest_api/handler"
 	"rest_api/middleware"
 )
@@ -29,13 +28,14 @@ func SetupRoutes(app *fiber.App) {
 	user.Get("/", middleware.JWTProtected(), handler.GetAllUsers)
 	user.Post("/", middleware.JWTProtected(), handler.CreateUser)
 
-	// Product
-	//product := api.Group("/product")
-	//product.Get("/", handler.GetAllProducts)
-	//product.Get("/:id", handler.GetProduct)
-	//product.Post("/", middleware.Protected(), handler.CreateProduct)
-	//product.Delete("/:id", middleware.Protected(), handler.DeleteProduct)
+	// Role
 
-	// Handle not founds
-	app.Use(config.NotFound)
+	// UserRole
+
+	// Category
+
+	// Question
+
+	// Test
+
 }
