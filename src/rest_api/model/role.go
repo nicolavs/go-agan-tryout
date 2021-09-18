@@ -9,8 +9,8 @@ type Role struct {
 
 // UserRole relation
 type UserRole struct {
-	UserID uint `gorm:"primaryKey" json:"user_id"`
-	RoleID uint `gorm:"primaryKey" json:"role_id"`
+	UserID uint `gorm:"primaryKey;index" json:"user_id"`
+	RoleID uint `gorm:"primaryKey;index" json:"role_id"`
 	User   User
 	Role   Role
 }

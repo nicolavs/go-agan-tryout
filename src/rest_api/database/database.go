@@ -14,9 +14,16 @@ import (
 
 var DB *gorm.DB
 
+var tables []interface{}
+
 // ConnectDb function
 func ConnectDb() {
 	var err error
+	// append list of table here
+	tables = append(tables, &model.User{})
+	tables = append(tables, &model.Role{})
+	tables = append(tables, &model.UserRole{})
+
 	p := config.Config("POSTGRES_PORT")
 	// because our config function returns a string, we are parsing our str to int here
 	port, err := strconv.ParseUint(p, 10, 32)
@@ -36,7 +43,12 @@ func ConnectDb() {
 	log.Println("connected")
 	db.Logger = logger.Default.LogMode(logger.Info)
 	log.Println("running migrations")
-	db.AutoMigrate(&model.User{})
+	for _, table := range tables {
+		err := db.AutoMigrate(table)
+		if err != nil {
+			log.Fatal("Failed to create table")
+		}
+	}
 	createAdminUser(db)
 	DB = db
 }
@@ -44,16 +56,19 @@ func ConnectDb() {
 func createAdminUser(db *gorm.DB) {
 	var user model.User
 	var role model.Role
-	result := db.Where(&model.Role{Name: "administrator"}).Find(&role)
+	var userRole model.UserRole
+
+	result := db.Where(&model.Role{Name: "administrator"}).Limit(1).Find(&role)
 	if result.RowsAffected == 0 {
 		if err := db.Create(&model.Role{
-			Name: "administrator",
+			Name:        "administrator",
+			Description: "administrator role",
 		}).Error; err != nil {
 			log.Fatal("Failed to create admin role. \n", err)
 		}
 	}
 
-	result = db.Where(&model.User{Username: "admin"}).Find(&user)
+	result = db.Where(&model.User{Username: "admin"}).Limit(1).Find(&user)
 	if result.RowsAffected == 0 {
 		hash, err := config.HashPassword(config.Config("ADMIN_DEFAULT_PASSWORD"))
 		if err != nil {
@@ -69,4 +84,19 @@ func createAdminUser(db *gorm.DB) {
 		}
 
 	}
+
+	result = db.Where(&model.UserRole{
+		UserID: user.ID,
+		RoleID: role.ID,
+	}).Limit(1).Find(&userRole)
+
+	if result.RowsAffected == 0 {
+		if err := db.Create(&model.UserRole{
+			UserID: user.ID,
+			RoleID: role.ID,
+		}).Error; err != nil {
+			log.Fatal("Failed to create admin user role. \n", err)
+		}
+	}
+
 }
