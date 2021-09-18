@@ -69,7 +69,6 @@ func CreateUser(c *fiber.Ctx) error {
 	hash, err := config.HashPassword(u.Password)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Couldn't hash password", "data": err})
-
 	}
 
 	newUser := model.User{

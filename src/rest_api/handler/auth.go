@@ -18,20 +18,27 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func getUserByUsername(u string, user *model.GetUserRoleModel) error {
+func getUserByUsername(u string, userRole *model.GetUserRoleModel) error {
+	var user model.User
 	db := database.DB
+	var roles []string
 
-	if err := db.Model(&model.User{}).Select("users.id, users.username, users.email, users.password, json_agg(roles.name) as roles").
-		Joins("join user_roles on user_roles.user_id = users.id").
-		Joins("join roles on user_roles.role_id = roles.id").
-		Where("users.username = ?", u).
-		Group("users.id, users.username, users.email, users.password").
-		First(&user).Error; err != nil {
+	if err := db.Where(&model.User{Username: u}).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil
 		}
 		return err
 	}
+
+	if err := db.Model(&model.Role{}).Select("roles.name").
+		Joins("join user_roles on user_roles.role_id = roles.id").
+		Where("user_roles.user_id = ?", user.ID).
+		Find(&roles).Error; err != nil {
+		return err
+	}
+
+	userRole.User = user
+	userRole.Role = roles
 
 	return nil
 }
