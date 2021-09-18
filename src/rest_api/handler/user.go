@@ -9,22 +9,6 @@ import (
 	"strconv"
 )
 
-func validToken(t *jwt.Token, rolesNeeded []string) bool {
-	claims := t.Claims.(jwt.MapClaims)
-	roles := claims["roles"].([]string)
-	if config.Contains(roles, "administrator") {
-		return true
-	}
-
-	for _, r := range rolesNeeded {
-		if config.Contains(roles, r) {
-			return true
-		}
-	}
-
-	return false
-}
-
 // GetAllUsers godoc
 // @Summary Get all users
 // @Description Get all users
@@ -56,11 +40,11 @@ func GetAllUsers(c *fiber.Ctx) error {
 	})
 }
 
-// CreateUser into db
+// CreateUser godoc
 func CreateUser(c *fiber.Ctx) error {
 	token := c.Locals("user").(*jwt.Token)
 
-	if !validToken(token, []string{"administrator"}) {
+	if !config.ValidToken(token, []string{"administrator"}) {
 		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Invalid token id", "data": nil})
 	}
 	// New Employee struct

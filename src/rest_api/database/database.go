@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gorm.io/driver/postgres"
 	"log"
-	"os"
 	"rest_api/config"
 	"strconv"
 
@@ -33,7 +32,6 @@ func ConnectDb() {
 
 	if err != nil {
 		log.Fatal("Failed to connect to database. \n", err)
-		os.Exit(2)
 	}
 	log.Println("connected")
 	db.Logger = logger.Default.LogMode(logger.Info)
@@ -45,12 +43,21 @@ func ConnectDb() {
 
 func createAdminUser(db *gorm.DB) {
 	var user model.User
-	result := db.Where(&model.User{Username: "admin"}).Find(&user)
+	var role model.Role
+	result := db.Where(&model.Role{Name: "administrator"}).Find(&role)
+	if result.RowsAffected == 0 {
+		if err := db.Create(&model.Role{
+			Name: "administrator",
+		}).Error; err != nil {
+			log.Fatal("Failed to create admin role. \n", err)
+		}
+	}
+
+	result = db.Where(&model.User{Username: "admin"}).Find(&user)
 	if result.RowsAffected == 0 {
 		hash, err := config.HashPassword(config.Config("ADMIN_DEFAULT_PASSWORD"))
 		if err != nil {
 			log.Fatal("Failed to create admin user. \n", err)
-			os.Exit(2)
 		}
 		newUser := model.User{
 			Username: "admin",
@@ -59,7 +66,6 @@ func createAdminUser(db *gorm.DB) {
 		}
 		if err := db.Create(&newUser).Error; err != nil {
 			log.Fatal("Failed to create admin user. \n", err)
-			os.Exit(2)
 		}
 
 	}
