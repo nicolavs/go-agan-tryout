@@ -41,11 +41,21 @@ func GetAllUsers(c *fiber.Ctx) error {
 }
 
 // CreateUser godoc
+// @Summary Create new user
+// @Description Create new user
+// @Tags User
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param input body model.CreateUser true "user"
+// @Success 201 {object} model.ResponseHTTP{data=model.CreateUser}
+// @Failure 503 {object} model.ResponseHTTP
+// @Router /user [post]
 func CreateUser(c *fiber.Ctx) error {
 	token := c.Locals("user").(*jwt.Token)
 
 	if !config.ValidToken(token, []string{"administrator"}) {
-		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Invalid token id", "data": nil})
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "Invalid token id", "data": nil})
 	}
 	// New Employee struct
 	u := new(model.CreateUser)

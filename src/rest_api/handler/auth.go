@@ -18,16 +18,22 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func getUserByUsername(u string) (*model.User, error) {
+func getUserByUsername(u string, user *model.GetUserRoleModel) error {
 	db := database.DB
-	var user model.User
-	if err := db.Where(&model.User{Username: u}).Find(&user).Limit(1).Error; err != nil {
+
+	if err := db.Model(&model.User{}).Select("users.id, users.username, users.email, users.password, json_agg(roles.name) as roles").
+		Joins("join user_roles on user_roles.user_id = users.id").
+		Joins("join roles on user_roles.role_id = roles.id").
+		Where("users.username = ?", u).
+		Group("users.id, users.username, users.email, users.password").
+		First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
+			return nil
 		}
-		return nil, err
+		return err
 	}
-	return &user, nil
+
+	return nil
 }
 
 // Login godoc
@@ -42,7 +48,7 @@ func getUserByUsername(u string) (*model.User, error) {
 // @Router /auth/login [post]
 func Login(c *fiber.Ctx) error {
 	var input model.LoginInput
-	var ud model.User
+	var ud model.GetUserRoleModel
 
 	if err := c.BodyParser(&input); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": "error", "message": "Error on login request", "data": err})
@@ -50,16 +56,9 @@ func Login(c *fiber.Ctx) error {
 	username := input.Username
 	pass := input.Password
 
-	user, err := getUserByUsername(username)
+	err := getUserByUsername(username, &ud)
 	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "Error on username", "data": err})
-	}
-
-	ud = model.User{
-		ID:       user.ID,
-		Username: user.Username,
-		Email:    user.Email,
-		Password: user.Password,
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "Invalid username", "data": err})
 	}
 
 	if !CheckPasswordHash(pass, ud.Password) {
@@ -71,7 +70,7 @@ func Login(c *fiber.Ctx) error {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["username"] = ud.Username
 	claims["user_id"] = ud.ID
-	//claims["roles"] =
+	claims["roles"] = ud.Role
 	claims["exp"] = time.Now().Add(time.Hour * 2).Unix()
 
 	t, err := token.SignedString([]byte(config.Config("JWT_SECRET")))

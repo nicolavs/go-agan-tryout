@@ -1,5 +1,14 @@
 basePath: /api/v1
 definitions:
+  model.CreateUser:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   model.LoginInput:
     properties:
       password:
@@ -9,6 +18,8 @@ definitions:
     type: object
   model.ResponseHTTP:
     properties:
+      count:
+        type: integer
       data:
         type: object
       message:
@@ -97,6 +108,38 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get all users
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Create new user
+      parameters:
+      - description: user
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateUser'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseHTTP'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.CreateUser'
+              type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/model.ResponseHTTP'
+      security:
+      - ApiKeyAuth: []
+      summary: Create new user
       tags:
       - User
 securityDefinitions:

@@ -14,3 +14,9 @@ type UserRole struct {
 	User   User
 	Role   Role
 }
+
+// GetUserRoleModel godoc
+type GetUserRoleModel struct {
+	User
+	Role []string
+}
