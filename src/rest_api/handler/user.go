@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
+	"net/mail"
 	"rest_api/config"
 	"rest_api/database"
 	"rest_api/model"
@@ -71,9 +72,14 @@ func CreateUser(c *fiber.Ctx) error {
 		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Couldn't hash password", "data": err})
 	}
 
+	addr, err := mail.ParseAddress(u.Email)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"status": "error", "message": "Invalid email", "data": err})
+	}
+
 	newUser := model.User{
 		Username: u.Username,
-		Email:    u.Email,
+		Email:    addr.Address,
 		Password: hash,
 	}
 
