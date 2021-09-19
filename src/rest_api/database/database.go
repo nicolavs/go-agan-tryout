@@ -45,6 +45,11 @@ func ConnectDb() {
 	tables = append(tables, &model.User{})
 	tables = append(tables, &model.Role{})
 	tables = append(tables, &model.UserRole{})
+	tables = append(tables, &model.QuestionSubType{})
+	tables = append(tables, &model.QuestionType{})
+	tables = append(tables, &model.Question{})
+	tables = append(tables, &model.Test{})
+	tables = append(tables, &model.TestQuestion{})
 	log.Println("running migrations")
 	for _, table := range tables {
 		err := db.AutoMigrate(table)
@@ -63,10 +68,9 @@ func createAdminUser(db *gorm.DB) {
 
 	result := db.Where(&model.Role{Name: "administrator"}).Limit(1).Find(&role)
 	if result.RowsAffected == 0 {
-		if err := db.Create(&model.Role{
-			Name:        "administrator",
-			Description: "administrator role",
-		}).Error; err != nil {
+		role.Name = "administrator"
+		role.Description = "administrator role"
+		if err := db.Create(&role).Error; err != nil {
 			log.Fatal("Failed to create admin role. \n", err)
 		}
 	}
@@ -77,13 +81,11 @@ func createAdminUser(db *gorm.DB) {
 		if err != nil {
 			log.Fatal("Failed to create admin user. \n", err)
 		}
-		newUser := model.User{
-			Username: "admin",
-			Email:    "aganpro@gmail.com",
-			Password: hash,
-			Disable:  false,
-		}
-		if err := db.Create(&newUser).Error; err != nil {
+		user.Username = "admin"
+		user.Email = "aganpro@gmail.com"
+		user.Password = hash
+		user.Disable = false
+		if err := db.Create(&user).Error; err != nil {
 			log.Fatal("Failed to create admin user. \n", err)
 		}
 
@@ -95,10 +97,9 @@ func createAdminUser(db *gorm.DB) {
 	}).Limit(1).Find(&userRole)
 
 	if result.RowsAffected == 0 {
-		if err := db.Create(&model.UserRole{
-			UserID: user.ID,
-			RoleID: role.ID,
-		}).Error; err != nil {
+		userRole.UserID = user.ID
+		userRole.RoleID = role.ID
+		if err := db.Create(&userRole).Error; err != nil {
 			log.Fatal("Failed to create admin user role. \n", err)
 		}
 	}
