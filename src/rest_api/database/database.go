@@ -19,10 +19,6 @@ var tables []interface{}
 // ConnectDb function
 func ConnectDb() {
 	var err error
-	// append list of table here
-	tables = append(tables, &model.User{})
-	tables = append(tables, &model.Role{})
-	tables = append(tables, &model.UserRole{})
 
 	p := config.Config("POSTGRES_PORT")
 	// because our config function returns a string, we are parsing our str to int here
@@ -30,6 +26,8 @@ func ConnectDb() {
 	if err != nil {
 		fmt.Println("Error parsing str to int")
 	}
+
+	// TODO turn off logging at production
 
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", config.Config("POSTGRES_HOST"),
 		port, config.Config("POSTGRES_USER"), config.Config("POSTGRES_PASSWORD"), config.Config("POSTGRES_DB"))
@@ -42,6 +40,11 @@ func ConnectDb() {
 	}
 	log.Println("connected")
 	db.Logger = logger.Default.LogMode(logger.Info)
+
+	// append list of table here for table auto migration
+	tables = append(tables, &model.User{})
+	tables = append(tables, &model.Role{})
+	tables = append(tables, &model.UserRole{})
 	log.Println("running migrations")
 	for _, table := range tables {
 		err := db.AutoMigrate(table)
@@ -78,6 +81,7 @@ func createAdminUser(db *gorm.DB) {
 			Username: "admin",
 			Email:    "aganpro@gmail.com",
 			Password: hash,
+			Disable:  false,
 		}
 		if err := db.Create(&newUser).Error; err != nil {
 			log.Fatal("Failed to create admin user. \n", err)

@@ -6,6 +6,7 @@ type User struct {
 	Username string `gorm:"uniqueIndex;not null" json:"username"`
 	Email    string `gorm:"uniqueIndex;not null" json:"email"`
 	Password string `gorm:"not null" json:"-"`
+	Disable  bool   `gorm:"not null; default:false" json:"-"`
 }
 
 type CreateUser struct {

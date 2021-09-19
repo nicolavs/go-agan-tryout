@@ -2,7 +2,6 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
 	"net/mail"
 	"rest_api/config"
 	"rest_api/database"
@@ -53,12 +52,6 @@ func GetAllUsers(c *fiber.Ctx) error {
 // @Failure 503 {object} model.ResponseHTTP
 // @Router /user [post]
 func CreateUser(c *fiber.Ctx) error {
-	token := c.Locals("user").(*jwt.Token)
-
-	if !config.ValidToken(token, []string{"administrator"}) {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "Invalid token id", "data": nil})
-	}
-	// New Employee struct
 	u := new(model.CreateUser)
 	db := database.DB
 
@@ -81,6 +74,7 @@ func CreateUser(c *fiber.Ctx) error {
 		Username: u.Username,
 		Email:    addr.Address,
 		Password: hash,
+		Disable:  true,
 	}
 
 	if err := db.Create(&newUser).Error; err != nil {

@@ -26,10 +26,12 @@ func SetupRoutes(app *fiber.App) {
 	// User
 	user := v1.Group("/user")
 	user.Get("/", middleware.JWTProtected(), handler.GetAllUsers)
-	user.Post("/", middleware.JWTProtected(), handler.CreateUser)
+	user.Post("/", handler.CreateUser)
+	// TODO redis OTP to activate user with email service
 
 	// Role
-
+	role := v1.Group("/role")
+	role.Get("/", middleware.JWTProtected(), handler.GetAllRoles)
 	// UserRole
 
 	// Category

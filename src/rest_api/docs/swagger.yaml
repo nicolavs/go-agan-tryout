@@ -27,6 +27,15 @@ definitions:
       status:
         type: string
     type: object
+  model.Role:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   model.User:
     properties:
       email:
