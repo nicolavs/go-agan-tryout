@@ -16,9 +16,17 @@ type Test struct {
 
 // TestQuestion godoc
 type TestQuestion struct {
-	TestID     int32 `gorm:"primaryKey;uniqueIndex:test_question_1" json:"test_id"`
-	Test       Test
-	QuestionID uint `gorm:"primaryKey" json:"question_id"`
-	Question   Question
-	Order      int32 `gorm:"not null;uniqueIndex:test_question_1" json:"order"`
+	TestQuestionID uint  `gorm:"primaryKey;autoIncrement" json:"test_question_id"`
+	TestID         int32 `gorm:"uniqueIndex:test_question_1;not null;index" json:"test_id"`
+	Test           Test
+	QuestionID     uint `gorm:"uniqueIndex:test_question_1;not null;index" json:"question_id"`
+	Question       Question
+}
+
+// UserTest godoc
+type UserTest struct {
+	UserID int32 `gorm:"primaryKey;index" json:"user_id"`
+	TestID int32 `gorm:"primaryKey;index" json:"test_id"`
+	User   User
+	Test   Test
 }

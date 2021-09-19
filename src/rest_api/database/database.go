@@ -45,7 +45,7 @@ func ConnectDb() {
 	tables = append(tables, &model.User{})
 	tables = append(tables, &model.Role{})
 	tables = append(tables, &model.UserRole{})
-	tables = append(tables, &model.QuestionSubType{})
+	tables = append(tables, &model.QuestionCategory{})
 	tables = append(tables, &model.QuestionType{})
 	tables = append(tables, &model.Question{})
 	tables = append(tables, &model.Test{})
