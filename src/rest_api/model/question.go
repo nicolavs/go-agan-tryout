@@ -12,7 +12,7 @@ type Question struct {
 	OptionC        string `gorm:"not null" json:"option_c"`
 	OptionD        string `gorm:"not null" json:"option_d"`
 	OptionE        string `gorm:"not null" json:"option_e"`
-	Solution       string `gorm:"not null;size:1" json:"solution"`
+	Solution       answer `gorm:"not null;type:answer_enum" json:"solution"`
 	SolutionImage  []byte `json:"solution_image"`
 	WeightA        uint8  `json:"weight_a"`
 	WeightB        uint8  `json:"weight_b"`

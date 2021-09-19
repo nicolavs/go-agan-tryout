@@ -41,6 +41,9 @@ func ConnectDb() {
 	log.Println("connected")
 	db.Logger = logger.Default.LogMode(logger.Info)
 
+	// create enum
+	db.Exec("CREATE TYPE answer_enum AS ENUM ('a','b','c','d','e')")
+
 	// append list of table here for table auto migration
 	tables = append(tables, &model.User{})
 	tables = append(tables, &model.Role{})
@@ -50,6 +53,9 @@ func ConnectDb() {
 	tables = append(tables, &model.Question{})
 	tables = append(tables, &model.Test{})
 	tables = append(tables, &model.TestQuestion{})
+	tables = append(tables, &model.TestQuestion{})
+	tables = append(tables, &model.UserQuestionSolution{})
+	tables = append(tables, &model.UserTestQuestionSolution{})
 	log.Println("running migrations")
 	for _, table := range tables {
 		err := db.AutoMigrate(table)
