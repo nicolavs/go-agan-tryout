@@ -18,7 +18,7 @@ import (
 // @Param limit query int false "Limit"
 // @Success 200 {object} model.ResponseHTTP{data=[]model.Role}
 // @Failure 503 {object} model.ResponseHTTP
-// @Router /user [get]
+// @Router /role [get]
 func GetAllRoles(c *fiber.Ctx) error {
 	limitStr := c.Query("limit", "20")
 	limit, _ := strconv.Atoi(limitStr)
