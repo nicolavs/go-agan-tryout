@@ -201,11 +201,6 @@ var doc = `{
                 }
             },
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Create new user",
                 "consumes": [
                     "application/json"

@@ -183,8 +183,6 @@ paths:
           description: Service Unavailable
           schema:
             $ref: '#/definitions/model.ResponseHTTP'
-      security:
-      - ApiKeyAuth: []
       summary: Create new user
       tags:
       - User

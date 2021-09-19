@@ -44,7 +44,6 @@ func GetAllUsers(c *fiber.Ctx) error {
 // @Summary Create new user
 // @Description Create new user
 // @Tags User
-// @Security ApiKeyAuth
 // @Accept json
 // @Produce json
 // @Param input body model.CreateUser true "user"
