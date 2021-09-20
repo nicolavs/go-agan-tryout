@@ -1,6 +1,9 @@
 package model
 
-import "database/sql/driver"
+import (
+	"database/sql/driver"
+	"time"
+)
 
 type answer string
 
@@ -27,7 +30,9 @@ type UserTestQuestionSolution struct {
 	TestQuestionID uint  `gorm:"primaryKey;index" json:"test_question_id"`
 	User           User
 	TestQuestion   TestQuestion
-	Solution       answer `gorm:"not null;type:answer_enum" json:"solution"`
+	Solution       answer    `gorm:"not null;type:answer_enum" json:"solution"`
+	CreatedAt      time.Time `gorm:"autoCreateTime"`
+	UpdatedAt      time.Time `gorm:"autoUpdateTime"`
 }
 
 // UserQuestionSolution godoc
@@ -36,5 +41,7 @@ type UserQuestionSolution struct {
 	QuestionID uint  `gorm:"primaryKey;index" json:"question_id"`
 	User       User
 	Question   Question
-	Solution   answer `gorm:"not null;type:answer_enum" json:"solution"`
+	Solution   answer    `gorm:"not null;type:answer_enum" json:"solution"`
+	CreatedAt  time.Time `gorm:"autoCreateTime"`
+	UpdatedAt  time.Time `gorm:"autoUpdateTime"`
 }
